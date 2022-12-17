@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Header } from "../components";
+import { Header, Feed } from "../components";
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen">
       <Head>
         <title>Instagram app</title>
         <link rel='icon' href='/favicon.ico' />
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       {/* Header */}
       <Header />
       {/* Feed */}
-
+      <Feed />
       {/* Modal */}
     </div>
   );
