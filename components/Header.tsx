@@ -1,9 +1,10 @@
 import React from "react";
-import { SearchIcon } from "@heroicons/react/outline";
+import { SearchIcon, PlusCircleIcon } from "@heroicons/react/outline";
+import { HomeIcon } from "@heroicons/react/solid";
 
 const Header = () => {
   return (
-    <div className='flex justify-between items-center max-w-6xl'>
+    <div className='flex justify-between items-center max-w-6xl xl:mx-auto mx-4'>
       {/* Left */}
       <div className='cursor-pointer h-24 w-24 relative hidden lg:inline-grid items-center'>
         <img
@@ -12,11 +13,11 @@ const Header = () => {
           className='object-contain'
         />
       </div>
-      <div className='cursor-pointer h-24 w-24 relative lg:hidden items-center'>
+      <div className='cursor-pointer h-24 w-24 grid lg:hidden items-center'>
         <img
           src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png'
           alt=''
-          className='object-contain'
+          className='object-contain h-12 w-12'
         />
       </div>
       {/* Middle */}
@@ -24,12 +25,20 @@ const Header = () => {
         <SearchIcon className='h-5 text-gray-500' />
         <input
           type='text'
-          className='focus:outline-none ml-2 bg-gray-50'
+          className='focus:outline-none ml-2 bg-gray-50 max-w-[70px] md:max-w-xl'
           placeholder='Search'
         />
       </div>
       {/* Right */}
-      <h1>Right Sides</h1>
+      <div className='flex items-center space-x-4'>
+        <HomeIcon className='hidden md:inline-flex h-6 cursor-pointer hover:scale-125 transition-tranform duration-200 ease-out' />
+        <PlusCircleIcon className='h-6 cursor-pointer hover:scale-125 transition-tranform duration-200 ease-out' />
+        <img
+          src='https://media-exp1.licdn.com/dms/image/C4E03AQEUkOyuPRDRBg/profile-displayphoto-shrink_800_800/0/1632062579605?e=2147483647&v=beta&t=qrWGaUbDba5-fBnA3u_N7ixokE4gTlHi2l5b3xoFT0s'
+          alt='profil'
+          className="h-10 rounded-full cursor-pointer"
+        />
+      </div>
     </div>
   );
 };
