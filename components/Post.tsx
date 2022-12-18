@@ -1,5 +1,5 @@
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
-import { HeartIcon, ChatIcon, BookmarkIcon } from "@heroicons/react/outline";
+import { HeartIcon, ChatIcon, BookmarkIcon, EmojiHappyIcon } from "@heroicons/react/outline";
 import React from "react";
 
 const Post = ({ username, userImg, img, caption }) => {
@@ -25,6 +25,17 @@ const Post = ({ username, userImg, img, caption }) => {
             </div>
             <BookmarkIcon className="btn"/>
         </div>
+        {/* Post Caption */}
+        <div className="flex p-5 space-x-2">
+            <h1 className="font-bold">{username}</h1>
+            <p className="truncate">{caption}</p>
+        </div>
+        {/* Post input box */}
+        <form className="flex items-center p-4 space-x-2">
+            <EmojiHappyIcon className="h-7 cursor-pointer"/>
+            <input type="text" placeholder="Enter your comment..." className="border-none flex-1 focus:ring-0 focus:outline-none"/>
+            <button className="text-blue-400 font-bold">Post</button>
+        </form>
     </div>
   );
 };
