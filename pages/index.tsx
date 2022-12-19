@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Header, Feed } from "../components";
+import { Header, Feed, UploadModal } from "../components";
 const Home: NextPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -14,6 +14,7 @@ const Home: NextPage = () => {
       {/* Feed */}
       <Feed />
       {/* Modal */}
+      <UploadModal />
     </div>
   );
 };
