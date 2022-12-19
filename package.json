@@ -13,6 +13,7 @@
     "next-auth": "^4.18.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-modal": "^3.16.1",
     "recoil": "^0.7.6",
     "v1": "^1.0.0"
   },
@@ -20,6 +21,7 @@
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "@types/react-modal": "^3.13.1",
     "autoprefixer": "^10.4.12",
     "postcss": "^8.4.18",
     "tailwind-scrollbar": "^2.0.1",
