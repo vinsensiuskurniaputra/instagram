@@ -15,7 +15,7 @@ const Feed = () => {
       </section>
 
       <section className='hidden md:inline-grid col-span-1'>
-        <div className='fixed w-[380px]'>
+        <div className='fixed md:w-[250px] lg:w-[380px]'>
           {/* Mini Profile */}
           <MiniProfile />
           {/* Suggections */}
