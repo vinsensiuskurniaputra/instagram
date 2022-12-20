@@ -2,13 +2,13 @@ import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import { HeartIcon, ChatIcon, BookmarkIcon, EmojiHappyIcon } from "@heroicons/react/outline";
 import React from "react";
 
-const Post = ({ username, userImg, img, caption }) => {
+const Post = ({ username, profileImg, image, caption }) => {
   return (
     <div className="bg-white rounded-md my-7 border">
       {/* Post Header */}
       <div className='flex items-center p-5'>
         <img
-          src={userImg}
+          src={profileImg}
           alt={username}
           className='rounded-full h-12 object-cover p-1 border-2 border-gray-100'
         />
@@ -16,7 +16,7 @@ const Post = ({ username, userImg, img, caption }) => {
         <DotsHorizontalIcon className='h-5 btn' />
       </div>
       {/* Post Image */}
-      <img src={img} alt="Post" className="object-cover w-full "/>
+      <img src={image} alt="Post" className="object-cover w-full "/>
       {/* Post Button */}
         <div className="flex px-4 pt-4 justify-between">
             <div className="flex space-x-4">
