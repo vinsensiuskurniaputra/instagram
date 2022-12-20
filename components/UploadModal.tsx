@@ -3,12 +3,45 @@ import { modalState } from "../atom/modalAtom";
 import { useRecoilState } from "recoil";
 import Modal from "react-modal";
 import { CameraIcon } from "@heroicons/react/outline";
+import {addDoc, collection, doc, serverTimestamp, updateDoc} from "firebase/firestore"
+import {db, storage} from "../firebase"
+import { useSession } from "next-auth/react";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 const UploadModal = () => {
   const [open, setOpen] = useRecoilState(modalState);
   const filePickerRef = useRef(null);
   const captionRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const {data: session} = useSession()
+
+  const uploadPost = async () => {
+    if(loading) return;
+
+    setLoading(true)
+
+    const docRef = addDoc(collection(db, "post"), {
+      caption : captionRef.current.value,
+      username : session?.user.username,
+      profileImg : session?.user?.image,
+      timestamp : serverTimestamp()
+    })
+
+    const imageRef = ref(storage, `posts/${(await docRef).id}/image`)
+    await uploadString(imageRef, selectedFile, "data_url").then(
+      async(snapshot)=>{
+        const downloadURL = await getDownloadURL(imageRef)
+        await updateDoc(doc(db, "post", (await docRef).id), {
+          image : downloadURL,
+        })
+      }
+    )
+
+    setOpen(false)
+    setLoading(false)
+    setSelectedFile(null)
+  }
 
   const addImageToPost = (event) => {
     const reader = new FileReader();
@@ -57,7 +90,8 @@ const UploadModal = () => {
             className='m-4 w-full border-none text-center focus:outline-none'
           />
           <button
-            disabled
+          onClick={uploadPost}
+            disabled={!selectedFile || loading}
             className={` w-full bg-red-500 text-white p-2 shadow-md hover:brightness-125 disabled:bg-gray-200 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:text-gray-500`}
           >
             Upload Post
