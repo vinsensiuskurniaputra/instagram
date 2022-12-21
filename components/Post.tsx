@@ -1,14 +1,23 @@
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import { HeartIcon, ChatIcon, BookmarkIcon, EmojiHappyIcon } from "@heroicons/react/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { async } from "@firebase/util";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 
 const Post = ({id, username, profileImg, image, caption }) => {
   const {data: session} = useSession()
   const [comment, setComment] = useState("")
+  const [comments, setComments] = useState([])
+
+  useEffect(()=>{
+    const unsubscribe = onSnapshot(
+      query(collection(db, "post", id, "comments"), orderBy ("timestamp", "desc")),
+      (snapshot) => {
+        setComments(snapshot.docs)
+      }
+    )
+  }, [db, id])
 
   const sendComment = async (event) =>{
     event.preventDefault()
@@ -51,6 +60,18 @@ const Post = ({id, username, profileImg, image, caption }) => {
             <h1 className="font-bold">{username}</h1>
             <p className="truncate">{caption}</p>
         </div>
+        {/* comments */}
+        {comments.length > 0 && (
+          <div className="mx-10 max-h-24 overflow-y-scroll scrollbar-thin">
+            {comments.map((comment) => (
+              <div className="flex space-x-2 items-center mb-2">
+                <img className="h-7 rounded-full object-cover" src={comment.data().userImg} alt="" />
+                <p className="font-semibold">{comment.data().username}</p>
+                <p className="flex-1 truncate ">{comment.data().comment}</p>
+              </div>
+            ))}
+          </div>
+        )}
         {/* Post input box */}
       {session && (
         <form className="flex items-center p-4 space-x-2">
