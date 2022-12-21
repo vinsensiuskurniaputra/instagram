@@ -3,67 +3,77 @@ import {
   HeartIcon,
   ChatIcon,
   BookmarkIcon,
-  EmojiHappyIcon
+  EmojiHappyIcon,
 } from "@heroicons/react/outline";
 import HeartIconFilled from "@heroicons/react/solid/HeartIcon";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
-const Post = ({id, username, profileImg, image, caption }) => {
-  const {data: session} = useSession()
-  const [comment, setComment] = useState("")
-  const [comments, setComments] = useState([])
-  const [likes, setLikes] = useState([])
-  const [hasLike, setHasLike] = useState(false)
+const Post = ({ id, username, profileImg, image, caption }) => {
+  const { data: session } = useSession();
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [hasLike, setHasLike] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const unsubscribe = onSnapshot(
-      query(collection(db, "post", id, "comments"), orderBy ("timestamp", "desc")),
+      query(
+        collection(db, "post", id, "comments"),
+        orderBy("timestamp", "desc")
+      ),
       (snapshot) => {
-        setComments(snapshot.docs)
+        setComments(snapshot.docs);
       }
-    )
-  }, [db, id])
+    );
+  }, [db, id]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db,"post", id, "likes"), 
-      (snapshot) =>{
-        setLikes(snapshot.docs)
+      collection(db, "post", id, "likes"),
+      (snapshot) => {
+        setLikes(snapshot.docs);
       }
-    )
-  },[db])
+    );
+  }, [db]);
 
   const likePosts = async () => {
-    if(hasLike){
+    if (hasLike) {
       await deleteDoc(doc(db, "post", id, "likes", session?.user.uid));
-    } else{
-      await setDoc(doc(db, "post", id, "likes", session?.user.uid),{
-        username: session?.user.username
-      })
+    } else {
+      await setDoc(doc(db, "post", id, "likes", session?.user.uid), {
+        username: session?.user.username,
+      });
     }
-  }
+  };
 
-  const sendComment = async (event) =>{
-    event.preventDefault()
-    const commentToSend = comment
-    setComment("")
-    await addDoc(collection(db, "post", id, "comments"),{
+  const sendComment = async (event) => {
+    event.preventDefault();
+    const commentToSend = comment;
+    setComment("");
+    await addDoc(collection(db, "post", id, "comments"), {
       comment: commentToSend,
       username: session?.user?.username,
-      userImg : session?.user?.image,
-      timestamp : serverTimestamp()
+      userImg: session?.user?.image,
+      timestamp: serverTimestamp(),
+    });
+  };
 
-    })
-  }
-
-  useEffect(() =>{
-    setHasLike(
-      likes.findIndex(like=>like.id === session?.user.uid) !== -1
-    )
-  },[likes])
+  useEffect(() => {
+    setHasLike(likes.findIndex((like) => like.id === session?.user.uid) !== -1);
+  }, [likes]);
   return (
     <div className='bg-white rounded-md my-7 border'>
       {/* Post Header */}
@@ -96,9 +106,14 @@ const Post = ({id, username, profileImg, image, caption }) => {
         </div>
       )}
       {/* Post Caption */}
-      <div className='flex p-5 space-x-2'>
-        <h1 className='font-bold'>{username}</h1>
-        <p className='truncate'>{caption}</p>
+      <div className='p-5 space-x-2'>
+        {likes.length > 0 && (
+          <p className='font-bold mb-1'>{likes.length} likes</p>
+        )}
+        <div className='flex'>
+          <h1 className='font-bold'>{username}</h1>
+          <p className='truncate'>{caption}</p>
+        </div>
       </div>
       {/* comments */}
       {comments.length > 0 && (
