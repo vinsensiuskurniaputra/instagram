@@ -12,12 +12,12 @@ const Posts = () => {
         setPosts(snapshot.docs);
       }
     );
-    return unsubscribe
+    return unsubscribe;
   });
   return (
     <div>
       {posts.map((post) => (
-        <Post key={post.id} {...post.data()} />
+        <Post key={post.id} id={post.id} {...post.data()} />
       ))}
     </div>
   );
